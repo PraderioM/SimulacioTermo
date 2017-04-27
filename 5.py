@@ -1,6 +1,7 @@
 from visual import *
 from visual.graph import *
 from random import random
+from random import gauss
 
 # A model of an ideal gas with hard-sphere collisions
 # Program uses numpy arrays for high speed computations
@@ -28,8 +29,8 @@ theory = gcurve(color=color.cyan)
 dv = 10.
 for v in arange(0,3001.+dv,dv): # theoretical prediction
     theory.plot(pos=(v,
-        (deltav/dv)*Natoms*4.*pi*((Matom/(2.*pi*k*T))**1.5)
-                     *exp((-0.5*Matom*v**2)/(k*T))*v**2*dv))
+        (deltav/dv)*Natoms*4.*pi*((Matom/(4.*pi*k*T))**1.5)
+                     *exp((-0.25*Matom*v**2)/(k*T))*v**2*dv))
 
 observation = ghistogram(bins=arange(0.,3000.,deltav),
                         accumulate=1, average=1, color=color.red)
@@ -156,10 +157,10 @@ while k<200: #let the sistems temperature stabilize
 
 
 
-Te=[]
+P=[]
+sigma = sqrt(2.8*T/15)*1E-24  #sigma of normal distribution of p going inwards from a gas at temperature 2T surrounding the box
 k=0
-while k<300:
-    Te.append(0.002*mean(mag(p/m)*mag(p/m))/(9*1.4))
+while k<400:
     k+=1
     #rate(50)
     #observation.plot(data=mag(p/m))
@@ -206,14 +207,21 @@ while k<300:
     # Bounce off walls
     outside = less_equal(pos,Ratom) # walls closest to origin
     p1 = p*outside
-    p = p-p1+abs(p1) # force p component inward
-    outside = greater_equal(pos,2**(1./3)*L-Ratom) # walls farther from origin
+    pext = [abs(gauss(0,sigma))*i for i in outside]
+    p = p-p1+pext # force p component inward
+    pres=sum(mag(pext-p1))
+    outside = greater_equal(pos,L-Ratom) # walls farther from origin
     p1 = p*outside
-    p = p-p1-abs(p1) # force p component inward
+    pext = [abs(gauss(0,sigma))*i for i in outside]
+    p = p-p1-pext # force p component inward
+    pres+=sum(mag(pext+p1))
+    P.append(pres/(6*dt*L**2))
+
+
 
 observation.plot(data=mag(p/m))
 Temp = gdisplay(x=0, y=win,
-             width=win, height=0.6*win, xtitle='Iterations', ytitle='Temperature (K)')
+             width=win, height=0.6*win, xtitle='Iterations', ytitle='Pressure (Pa)')
 curve = gcurve(color=color.red)
-for v in range(len(Te)): # theoretical prediction
-    curve.plot(pos=(v,Te[v]))
+for v in range(len(P)): # theoretical prediction
+    curve.plot(pos=(v,P[v]))
