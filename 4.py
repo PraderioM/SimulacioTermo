@@ -156,10 +156,10 @@ while k<200: #let the sistems temperature stabilize
 
 
 
-T=[]
+Te=[]
 k=0
 while k<300:
-    T.append(0.002*mean(mag(p/m)*mag(p/m))/(9*1.4))
+    Te.append(0.002*mean(mag(p/m)*mag(p/m))/(9*1.4))
     k+=1
     #rate(50)
     #observation.plot(data=mag(p/m))
@@ -217,5 +217,5 @@ print('\n\n')
 Temp = gdisplay(x=0, y=win,
              width=win, height=0.6*win, xtitle='Iterations', ytitle='Temperature (K)')
 curve = gcurve(color=color.red)
-for v in range(len(T)): # theoretical prediction
-    curve.plot(pos=(v,T[v]))
+for v in range(len(Te)): # theoretical prediction
+    curve.plot(pos=(v,Te[v]))
