@@ -213,3 +213,19 @@ Temp = gdisplay(x=0, y=win, ymin=298, ymax=302,
 curve = gcurve(color=color.red)
 for v in range(len(Te)): # theoretical prediction
     curve.plot(pos=(v,Te[v]))
+text = open('expansion.txt', 'w')# print temperature difference
+i=0
+j=0
+text.write('\\begin{table}\n\t\\centering\n\t\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}\n\t\t\\hline\n\t')
+while 10*i+j<len(Te):
+    text.write('\t')
+    for j in range(9):
+        if 10*i+j<len(Te):
+            s=' ${:.2}$ &'.format(Te[10*i+j]-Te[0])
+            text.write(s)
+    if 10*i+9<len(Te):
+        s=' ${:.2}$\\\\\n\t\t\\hline\n\t'.format(Te[10*i+9]-Te[0])
+        text.write(s)
+    i+=1
+text.write('\\end{tabular}\n\\end{table}')
+text.close()
