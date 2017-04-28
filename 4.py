@@ -102,9 +102,7 @@ radius = array(rlist)
 
 pos = pos+(p/m)*(dt/2.) # initial half-step
 
-k=0
-while k<200: #let the sistems temperature stabilize
-    k+=1
+for k in range(200): #let the sistems temperature stabilize
 
     # Update all positions
     pos = pos+(p/m)*dt
@@ -157,10 +155,8 @@ while k<200: #let the sistems temperature stabilize
 
 
 Te=[]
-k=0
-while k<300:
+for k in range(300):
     Te.append(0.002*mean(mag(p/m)*mag(p/m))/(9*1.4))
-    k+=1
     #rate(50)
     #observation.plot(data=mag(p/m))
 
