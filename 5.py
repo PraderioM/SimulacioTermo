@@ -103,9 +103,7 @@ radius = array(rlist)
 
 pos = pos+(p/m)*(dt/2.) # initial half-step
 
-k=0
-while k<200: #let the sistems temperature stabilize
-    k+=1
+for k in range(200): #let the sistems temperature stabilize
 
     # Update all positions
     pos = pos+(p/m)*dt
@@ -159,9 +157,7 @@ while k<200: #let the sistems temperature stabilize
 
 P=[]
 sigma = sqrt(2.8*T/15)*1E-24  #sigma of normal distribution of p going inwards from a gas at temperature 2T surrounding the box
-k=0
-while k<400:
-    k+=1
+for k in range(100):
     #rate(50)
     #observation.plot(data=mag(p/m))
 
@@ -209,13 +205,17 @@ while k<400:
     p1 = p*outside
     pext = [abs(gauss(0,sigma))*i for i in outside]
     p = p-p1+pext # force p component inward
-    pres=sum(mag(pext-p1))
+    F=sum(mag(p1-pext))
+    n = sum(outside)
     outside = greater_equal(pos,L-Ratom) # walls farther from origin
     p1 = p*outside
     pext = [abs(gauss(0,sigma))*i for i in outside]
     p = p-p1-pext # force p component inward
-    pres+=sum(mag(pext+p1))
-    P.append(pres/(6*dt*L**2))
+    F+=sum(mag(p1+pext))
+    n += sum(outside)
+    F=F/dt
+    A=n*pi*Ratom**2
+    P.append(F/A)
 
 
 
