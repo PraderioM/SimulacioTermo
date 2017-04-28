@@ -208,7 +208,7 @@ for k in range(300):
     p = p-p1-abs(p1) # force p component inward
 
 observation.plot(data=mag(p/m))
-Temp = gdisplay(x=0, y=win,
+Temp = gdisplay(x=0, y=win, ymin=298, ymax=302,
              width=win, height=0.6*win, xtitle='Iterations', ytitle='Temperature (K)')
 curve = gcurve(color=color.red)
 for v in range(len(Te)): # theoretical prediction
