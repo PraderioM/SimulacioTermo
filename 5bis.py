@@ -157,7 +157,7 @@ for k in range(200): #let the sistems temperature stabilize
 
 P=[] 
 sigma = sqrt(42*T)*10  #sigma of normal distribution of p going inwards from a gas at temperature 2T surrounding the box
-for k in range(100):
+for k in range(200):
     #rate(50)
     #observation.plot(data=mag(p/m))
 
