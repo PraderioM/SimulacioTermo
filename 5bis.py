@@ -155,8 +155,8 @@ for k in range(200): #let the sistems temperature stabilize
 
 
 
-P=[]
-sigma = sqrt(2.8*T/15)*1E-24  #sigma of normal distribution of p going inwards from a gas at temperature 2T surrounding the box
+P=[] 
+sigma = sqrt(42*T)*10  #sigma of normal distribution of p going inwards from a gas at temperature 2T surrounding the box
 for k in range(100):
     #rate(50)
     #observation.plot(data=mag(p/m))
@@ -204,11 +204,11 @@ for k in range(100):
     # Bounce off walls
     outside = less_equal(pos,Ratom) # walls closest to origin
     p1 = p*outside
-    pext = [abs(gauss(0,sigma))*i for i in outside]
+    pext = [Matom*abs(gauss(0,sigma))*i for i in outside]
     p = p-p1+pext # force p component inward
     outside = greater_equal(pos,L-Ratom) # walls farther from origin
     p1 = p*outside
-    pext = [abs(gauss(0,sigma))*i for i in outside]
+    pext = [Matom*abs(gauss(0,sigma))*i for i in outside]
     p = p-p1-pext # force p component inward
 
 
