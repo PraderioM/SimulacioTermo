@@ -163,7 +163,3 @@ while True:
     outside = greater_equal(pos,L-Ratom) # walls farther from origin
     p1 = p*outside
     p = p-p1-abs(p1) # force p component inward
-
-     Update positions of display objects
-    for i in range(Natoms):
-        Atoms[i].pos = pos[i]from visual import *
