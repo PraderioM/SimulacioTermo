@@ -104,15 +104,12 @@ radius = array(rlist)
 pos = pos+(p/m)*(dt/2.) # initial half-step
 
 for k in range(200): #let the sistems temperature stabilize
-
     # Update all positions
     pos = pos+(p/m)*dt
-
     r = pos-pos[:,newaxis] # all pairs of atom-to-atom vectors
     rmag = sqrt(sum(square(r),-1)) # atom-to-atom scalar distances
     hit = less_equal(rmag,radius+radius[:,None])-identity(Natoms)
     hitlist = sort(nonzero(hit.flat)[0]).tolist() # i,j encoded as i*Natoms+j
-
     # If any collisions took place:
     for ij in hitlist:
         i, j = divmod(ij,Natoms) # decode atom pair
@@ -143,7 +140,7 @@ for k in range(200): #let the sistems temperature stabilize
         p[j] = pcmj+ptot*mj/mtot
         pos[i] = pos[i]+(p[i]/mi)*deltat # move forward deltat in time
         pos[j] = pos[j]+(p[j]/mj)*deltat
- 
+
     # Bounce off walls
     outside = less_equal(pos,Ratom) # walls closest to origin
     p1 = p*outside
@@ -152,8 +149,11 @@ for k in range(200): #let the sistems temperature stabilize
     p1 = p*outside
     p = p-p1-abs(p1) # force p component inward
 
-
-
+def posgauss(mu,sigma):
+    n=gauss(mu, sigma)
+    while n<0:
+        n=gauss(mu,sigma)
+    return n
 
 P=[] 
 sigma = sqrt(42*T)*10  #sigma of normal distribution of p going inwards from a gas at temperature 2T surrounding the box
@@ -204,11 +204,11 @@ for k in range(200):
     # Bounce off walls
     outside = less_equal(pos,Ratom) # walls closest to origin
     p1 = p*outside
-    pext = [Matom*abs(gauss(0,sigma))*i for i in outside]
+    pext = [Matom*posgauss(0,sigma)*i for i in outside]
     p = p-p1+pext # force p component inward
     outside = greater_equal(pos,L-Ratom) # walls farther from origin
     p1 = p*outside
-    pext = [Matom*abs(gauss(0,sigma))*i for i in outside]
+    pext = [Matom*posgauss(0,sigma)*i for i in outside]
     p = p-p1-pext # force p component inward
 
 
