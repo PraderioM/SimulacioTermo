@@ -8,15 +8,17 @@ T = [(t-1.32)/1.32 for t in T]
 lT= [log(abs(t)) for t in T]
 dg=[0.7, 0.65, 0.65, 0.6, 0.58, 0.52]
 ldg= [log(abs(x)) for x in dg]
+fracg=[ldg[i]/lT[i] for i in range(len(T))]
 dl=[0.05, 0.05, 0.05, 0.1, 0.1, 0.18]
 ldl = [log(abs(x)) for x in dl]
+fracl=[ldl[i]/lT[i] for i in range(len(T))]
 
-plt.plot(lT,ldg, 'ro')
-lr=linreg(lT,ldg)
-plt.plot(lT, [lr.slope*x+lr.intercept for x in lT], 'k')
+plt.plot(T,fracg, 'ro')
+lr=linreg(T,fracg)
+plt.plot(T, [lr.slope*x+lr.intercept for x in T], 'k')
 plt.title('Exponente critico gas')
-plt.xlabel('log(|tau|)')
-plt.ylabel('log(|d|)')
+plt.xlabel('tau')
+plt.ylabel('log(|d|)/log(|tau|)')
 plt.savefig('expcritgas.png')
 plt.clf()
 
@@ -26,12 +28,12 @@ s='El exponente critico calculado a partir del gas es \n{}\n'.format(kg)
 data.write(s)
 
 
-plt.plot(lT,ldl, 'ro')
-lr=linreg(lT,ldl)
-plt.plot(lT, [lr.slope*x+lr.intercept for x in lT], 'k')
+plt.plot(T,fracl, 'ro')
+lr=linreg(T,fracl)
+plt.plot(T, [lr.slope*x+lr.intercept for x in T], 'k')
 plt.title('Exponente critico liquido')
-plt.xlabel('log(|tau|)')
-plt.ylabel('log(|d|)')
+plt.xlabel('tau')
+plt.ylabel('log(|d|)/log(|tau|)')
 plt.savefig('expcritliquid.png')
 plt.clf()
 
