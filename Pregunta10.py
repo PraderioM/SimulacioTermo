@@ -11,7 +11,7 @@ ldg= [log(abs(x)) for x in dg]
 dl=[0.05, 0.05, 0.05, 0.1, 0.1, 0.18]
 ldl = [log(abs(x)) for x in dl]
 
-plt.plot(lT,ldg)
+plt.plot(lT,ldg, 'ro')
 lr=linreg(lT,ldg)
 plt.plot(lT, [lr.slope*x+lr.intercept for x in lT], 'k')
 plt.title('Exponente critico gas')
@@ -26,7 +26,7 @@ s='El exponente critico calculado a partir del gas es \n{}\n'.format(kg)
 data.write(s)
 
 
-plt.plot(lT,ldl)
+plt.plot(lT,ldl, 'ro')
 lr=linreg(lT,ldl)
 plt.plot(lT, [lr.slope*x+lr.intercept for x in lT], 'k')
 plt.title('Exponente critico liquido')
