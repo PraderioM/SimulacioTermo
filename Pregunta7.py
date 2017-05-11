@@ -3,10 +3,10 @@ from pylab import savefig
 from scipy.optimize import curve_fit
 from numpy import arange
 
-f=lambda x, N, b, a: x/(N-b*x)+a*x/(N**2)
-g=lambda T, x, N, b, a: x*T/(N-2*b*x)+a*x/(N**2)
+#f=lambda d, kT, b, a: d*kT/(1-b*d)-a*d**2
+#g=lambda kT, d, b, a: d*kT/(1-b*d)-a*d**2
 
-d=8*[[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]]
+D=8*[[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]]
 T=8*[[0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3]]
 P=[]
 errP=[]
@@ -35,21 +35,32 @@ errP1=[[ errP[i][j] for i in range(8)] for j in range(8)]
 
 
 for i in range(8):
-	plt.errorbar(d[i],P[i], yerr=errP[i], fmt='o', color=Colors[i])
+	plt.errorbar(D[i],P[i], yerr=errP[i], fmt='o', color=Colors[i])
 
 plt.xlabel('densidad reducida')
 plt.ylabel('presion reducida')
 
 curvas=[]
 Label=['T=0.6', 'T=0.7', 'T=0.8', 'T=0.9', 'T=1.0', 'T=1.1', 'T=1.2', 'T=1.3']
-N=[7.4, 9, 10.4, 11, 11.4, 14.6, 8.5, 10]
-b=[6.4, 9, 12, 13, 13.6, 17.7, 10.3, 12.2]
-a=[-80, -98, -120, -115, -86, -65, -8, 15]
-X=arange(d[0][0], d[0][-1], 0.01)
+#N=[7.4, 9, 10.4, 11, 11.4, 14.6, 8.5, 10]
+#b=[6.4, 9, 12, 13, 13.6, 17.7, 10.3, 12.2]
+#a=[-80, -98, -120, -115, -86, -65, -8, 15]
+X=arange(D[0][0], D[0][-1], 0.01)
 j=0
+a=5.1
+b=1.04
 for i in range(8):
-	aux, =plt.plot(X, [x/(N[i]-b[i]*x)+a[i]*x/(N[i]**2) for x in X], label=Label[i], color=Colors[i])
-	curvas.append(aux)	
+	kT=T[0][i]
+#	try:
+#		FitValues, Covariance=curve_fit(lambda d, a, b: d*kT/(1-b*d)-a*d**2 ,d[i],P1[i], p0=[5.1, 1])
+#		aux, =plt.plot(X, [g(x, *FitValues) for x in X], label=Label[i], color=Colors[i])
+#		curvas.append(aux)
+#	except:
+#		del Label[i-j]
+#		j+=1
+#		pass
+	aux, =plt.plot(X, [d*kT/(1-b*d)-a*d**2 for d in X], label=Label[i], color=Colors[i])
+	curvas.append(aux)
 
 plt.legend(curvas, Label, loc=2)
 plt.savefig('Isotermas.png')
@@ -68,14 +79,17 @@ Label=['p=0.1', 'p=0.2', 'p=0.3', 'p=0.4', 'p=0.5', 'p=0.6', 'p=0.7', 'p=0.8']
 X=arange(T[0][0], T[0][-1], 0.01)
 j=0
 for i in range(8):
-	try:
-		FitValues, Covariance=curve_fit(g ,T[i],P1[i], p0=[0.1, 500, 2498, -20000])
-		aux, =plt.plot(X, [g(x, *FitValues) for x in X], label=Label[i], color=Colors[i])
-		curvas.append(aux)
-	except:
-		del Label[i-j]
-		j+=1
-		pass
+	d=D[0][i]
+#	try:
+#		FitValues, Covariance=curve_fit(g ,T[i],P1[i], p0=[0.8, 50, 70])
+#		aux, =plt.plot(X, [g(x, *FitValues) for x in X], label=Label[i], color=Colors[i])
+#		curvas.append(aux)
+#	except:
+#		del Label[i-j]
+#		j+=1
+#		pass
+	aux, =plt.plot(X, [d*kT/(1-b*d)-a*d**2 for kT in X], label=Label[i], color=Colors[i])
+	curvas.append(aux)
 
 plt.legend(curvas, Label, loc=2)
 plt.savefig('Isodensas.png')
